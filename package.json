@@ -1,0 +1,19 @@
+{
+  "name": "siss",
+  "version": "1.0.0",
+  "description": "",
+  "main": "siss.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sovcharov/siss.git"
+  },
+  "author": "Sergei Ovcharov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sovcharov/siss/issues"
+  },
+  "homepage": "https://github.com/sovcharov/siss#readme"
+}
