@@ -1,4 +1,4 @@
-import { AWSConfig } from '../../sissconf/awsconfig.js';
+import AWSConfig from '../../sissconf/awsconfig.js';
 const awsConfig = new AWSConfig();
 import { S3Client } from '@aws-sdk/client-s3';
 
