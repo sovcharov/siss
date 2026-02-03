@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "siss.js",
+  "type": "module",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "start": "node siss.js",
+    "watch": "sudo nodemon -w . --ext \".ts\",js --exec \"npm start\""
   },
   "repository": {
     "type": "git",
@@ -15,5 +18,17 @@
   "bugs": {
     "url": "https://github.com/sovcharov/siss/issues"
   },
-  "homepage": "https://github.com/sovcharov/siss#readme"
+  "homepage": "https://github.com/sovcharov/siss#readme",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.981.0",
+    "body-parser": "^2.2.2",
+    "cyrillic-to-translit-js": "^3.2.1",
+    "express": "^5.2.1",
+    "mysql2": "^3.16.2",
+    "node-xlsx": "^0.24.0"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.19.6",
+    "@types/express": "^5.0.6"
+  }
 }
