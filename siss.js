@@ -2,7 +2,7 @@ import express from 'express';
 const app = express();
 import bodyParser from 'body-parser';
 import fs from 'fs';
-import { MyNodeConfig } from '../sissconf/nodeconfig.js';
+import MyNodeConfig from '../sissconf/nodeconfig.js';
 const myNodeConfig = new MyNodeConfig();
 import { MySqlService } from './services/mysql.service.js';
 const mySqlService = new MySqlService();
