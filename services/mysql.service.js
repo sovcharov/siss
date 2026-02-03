@@ -1,5 +1,6 @@
 import * as mysql from 'mysql2';
-import { MySqlConnection } from "../../sissconf/dbconnectmysqlnode.js";
+import pkg from "../../sissconf/dbconnectmysqlnode.js";
+const { MySqlConnection } = pkg;
 const mySqlConnection = new MySqlConnection();
 import { MyFunctions } from './functions.service.js';
 const myFunctions = new MyFunctions();
