@@ -382,9 +382,7 @@ app.get('/api/createsitemap', function(req, res) {
   let company = 1;
   mySqlService.getSiteMapData(company, (priceListData) => {
     myFunctions.getSiteMapData(priceListData, (data)=>{
-      // console.log(data);
       myFileService.uploadSiteMap(data, ()=>{
-        // res.send({data: date, res: "OK"});
           myFileService.getSiteMapUpdateDate((data)=>{
             res.send({data: data, res: "OK"});
           });
