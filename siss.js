@@ -1,12 +1,8 @@
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 import express from 'express';
 const app = express();
 import bodyParser from 'body-parser';
 import fs from 'fs';
-import MyNodeConfig from `${__dirname}/../sissconf/nodeconfig.js`;
+import MyNodeConfig from '../sissconf/nodeconfig.js';
 const myNodeConfig = new MyNodeConfig();
 import { MySqlService } from './services/mysql.service.js';
 const mySqlService = new MySqlService();
