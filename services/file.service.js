@@ -95,7 +95,7 @@ export class MyFileService {
       test: "test"
     };
     try {
-      const stats = fs.statSync('path/to/your/file.txt');
+      const stats = fs.statSync(`${__dirname}/${fsConfig.siteDir}files/test.xlsx`);
       const creationDate = stats.birthtime;
       console.log(`File was created on: ${creationDate}`);
       console.log(`Creation date in milliseconds: ${stats.birthtimeMs}`);
