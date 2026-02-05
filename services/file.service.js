@@ -1,6 +1,10 @@
 import * as fs from 'fs';
- import FsConfig from '../../sissconf/fsconfig.js';
+import FsConfig from '../../sissconf/fsconfig.js';
 const fsConfig = new FsConfig();
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export class MyFileService {
 
