@@ -91,7 +91,7 @@ export class MyFileService {
   }
 
   getPriceListUpdateDate (callback) {
-    data = {
+    let data = {
       test: "test"
     };
     try {
