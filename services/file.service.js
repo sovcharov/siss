@@ -101,7 +101,7 @@ export class MyFileService {
       // console.log(`File was created on: ${creationDate}`);
       callback({LastModified: stats.mtime});
     } catch (err) {
-      // console.error('Error getting file stats synchronously:', err);
+      console.error('Error getting file stats synchronously:', err);
       callback(err);
     }
   }
@@ -111,6 +111,7 @@ export class MyFileService {
       const stats = fs.statSync(`${__dirname}/${fsConfig.siteDir}/sitemap.xml`);
       callback({LastModified: stats.mtime});
     } catch (err) {
+      console.log(err);
       callback(err);
     }
   }
@@ -120,6 +121,7 @@ export class MyFileService {
       fs.writeFileSync(`${__dirname}/${fsConfig.siteDir}/files/SeltexPrice.xlsx`, file);
       callback("OK");
     } catch (err) {
+      console.log(err);
       callback(err);
     }
   }
@@ -129,6 +131,17 @@ export class MyFileService {
       fs.writeFileSync(`${__dirname}/${fsConfig.siteDir}/files/SeltexCross.xlsx`, file);
       callback("OK");
     } catch (err) {
+      console.log(err);
+      callback(err);
+    }
+  }
+
+    uploadSiteMap (file, callback) {
+    try {
+      fs.writeFileSync(`${__dirname}/${fsConfig.siteDir}/sitemap.xml`, file);
+      callback("OK");
+    } catch (err) {
+      console.log(err);
       callback(err);
     }
   }

@@ -12,8 +12,8 @@ import { MyFunctions } from './services/functions.service.js';
 const myFunctions = new MyFunctions();
 import { MyXLService } from './services/xls.service.js';
 const myXLService = new MyXLService();
-import { MyAWSService } from './services/aws.service.js';
-const myAWSService = new MyAWSService();
+// import { MyAWSService } from './services/aws.service.js';
+// const myAWSService = new MyAWSService();
 import * as http from 'http';
 import * as https from 'https';
 
@@ -381,10 +381,13 @@ app.get('/api/getsitemapupdatedate', function(req, res) {
 app.get('/api/createsitemap', function(req, res) {
   let company = 1;
   mySqlService.getSiteMapData(company, (priceListData) => {
-    myFunctions.getSiteMapData(priceListData, (data, date)=>{
+    myFunctions.getSiteMapData(priceListData, (data)=>{
       // console.log(data);
-      myAWSService.uploadSiteMap(data, ()=>{
-        res.send({data: date, res: "OK"});
+      myFileService.uploadSiteMap(data, ()=>{
+        // res.send({data: date, res: "OK"});
+          myFileService.getSiteMapUpdateDate((data)=>{
+            res.send({data: data, res: "OK"});
+          });
       });
     });
   });

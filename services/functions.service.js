@@ -285,7 +285,7 @@ export class MyFunctions {
     }
     finalData += `
 </urlset>`;
-    callback(finalData, date);
+    callback(finalData);
 
   }
 
