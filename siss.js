@@ -370,15 +370,15 @@ app.get('/api/getpricelistupdatedate', function(req, res) {
   myFileService.getPriceListUpdateDate((data)=>{
     res.send(data);
   });
-  // myAWSService.getPriceUpdateDate((data)=>{
-  //   res.send(data);
-  // });
 });
 
 app.get('/api/getsitemapupdatedate', function(req, res) {
-  myAWSService.getSiteMapUpdateDate((data)=>{
+  myFileService.getSiteMapUpdateDate((data)=>{
     res.send(data);
   });
+  // myAWSService.getSiteMapUpdateDate((data)=>{
+  //   res.send(data);
+  // });
 });
 
 app.get('/api/createsitemap', function(req, res) {

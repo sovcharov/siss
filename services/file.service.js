@@ -104,7 +104,15 @@ export class MyFileService {
       // console.error('Error getting file stats synchronously:', err);
       callback(err);
     }
-    
+  }
+
+  getSiteMapUpdateDate (callback) {
+    try {
+      const stats = fs.statSync(`${__dirname}/${fsConfig.siteDir}/sitemap.xml`);
+      callback({LastModified: stats.birthtime});
+    } catch (err) {
+      callback(err);
+    }
   }
 
 }
