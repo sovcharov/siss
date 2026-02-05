@@ -95,18 +95,16 @@ export class MyFileService {
   }
 
   getPriceListUpdateDate (callback) {
-    let data = {
-      test: "test"
-    };
     try {
       const stats = fs.statSync(`${__dirname}/${fsConfig.siteDir}files/test.xlsx`);
-      const creationDate = stats.birthtime;
-      console.log(`File was created on: ${creationDate}`);
-      console.log(`Creation date in milliseconds: ${stats.birthtimeMs}`);
+      // const creationDate = stats.birthtime;
+      // console.log(`File was created on: ${creationDate}`);
+      callback(stats.birthtime);
     } catch (err) {
-      console.error('Error getting file stats synchronously:', err);
+      // console.error('Error getting file stats synchronously:', err);
+      callback(err);
     }
-    callback(data);
+    
   }
 
 }

@@ -368,7 +368,7 @@ app.get('/api/createxlprice', function(req, res) {
 
 app.get('/api/getpricelistupdatedate', function(req, res) {
   myFileService.getPriceListUpdateDate((data)=>{
-    console.log(data);
+    res.send(data);
   });
   // myAWSService.getPriceUpdateDate((data)=>{
   //   res.send(data);
