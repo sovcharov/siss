@@ -84,10 +84,25 @@ export class MyFileService {
     // }
   }
 
-   getCertificates() {
+  getCertificates() {
     let privateKey = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/privkey.pem');
     let certificate = fs.readFileSync('/etc/letsencrypt/live/seltex.ru/fullchain.pem');
     return { key: privateKey, cert: certificate };
+  }
+
+  getPriceListUpdateDate (callback) {
+    data = {
+      test: "test"
+    };
+    try {
+      const stats = fs.statSync('path/to/your/file.txt');
+      const creationDate = stats.birthtime;
+      console.log(`File was created on: ${creationDate}`);
+      console.log(`Creation date in milliseconds: ${stats.birthtimeMs}`);
+    } catch (err) {
+      console.error('Error getting file stats synchronously:', err);
+    }
+    callback(data);
   }
 
 }

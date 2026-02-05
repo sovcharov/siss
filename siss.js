@@ -367,9 +367,12 @@ app.get('/api/createxlprice', function(req, res) {
 });
 
 app.get('/api/getpricelistupdatedate', function(req, res) {
-  myAWSService.getPriceUpdateDate((data)=>{
-    res.send(data);
+  myFileService.getPriceListUpdateDate((data)=>{
+    console.log(data);
   });
+  // myAWSService.getPriceUpdateDate((data)=>{
+  //   res.send(data);
+  // });
 });
 
 app.get('/api/getsitemapupdatedate', function(req, res) {
