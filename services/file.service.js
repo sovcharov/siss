@@ -99,7 +99,7 @@ export class MyFileService {
       const stats = fs.statSync(`${__dirname}/${fsConfig.siteDir}files/test.xlsx`);
       // const creationDate = stats.birthtime;
       // console.log(`File was created on: ${creationDate}`);
-      callback({LastModified: stats.birthtime});
+      callback({LastModified: stats.mtime});
     } catch (err) {
       // console.error('Error getting file stats synchronously:', err);
       callback(err);
@@ -109,7 +109,7 @@ export class MyFileService {
   getSiteMapUpdateDate (callback) {
     try {
       const stats = fs.statSync(`${__dirname}/${fsConfig.siteDir}/sitemap.xml`);
-      callback({LastModified: stats.birthtime});
+      callback({LastModified: stats.mtime});
     } catch (err) {
       callback(err);
     }
