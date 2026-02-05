@@ -96,7 +96,7 @@ export class MyFileService {
 
   getPriceListUpdateDate (callback) {
     try {
-      const stats = fs.statSync(`${__dirname}/${fsConfig.siteDir}files/test.xlsx`);
+      const stats = fs.statSync(`${__dirname}/${fsConfig.siteDir}files/SeltexPrice.xlsx`);
       // const creationDate = stats.birthtime;
       // console.log(`File was created on: ${creationDate}`);
       callback({LastModified: stats.mtime});
