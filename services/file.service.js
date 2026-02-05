@@ -115,4 +115,22 @@ export class MyFileService {
     }
   }
 
+  uploadPrice (file, callback) {
+    try {
+      fs.writeFileSync(`${__dirname}/${fsConfig.siteDir}/files/SeltexPrice.xlsx`, file);
+      callback("OK");
+    } catch (err) {
+      callback(err);
+    }
+  }
+
+  uploadCross (file, callback) {
+    try {
+      fs.writeFileSync(`${__dirname}/${fsConfig.siteDir}/files/SeltexCross.xlsx`, file);
+      callback("OK");
+    } catch (err) {
+      callback(err);
+    }
+  }
+
 }

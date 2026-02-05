@@ -353,10 +353,10 @@ app.post('/api/getrecommendedurlforitem/company/:company/description/:descriptio
 app.get('/api/createxlprice', function(req, res) {
   mySqlService.getPriceListData(req.params.company, (priceListData) => {
     myXLService.createXLPrice(priceListData, (xlFile)=>{
-        myAWSService.uploadPrice(xlFile, ()=>{
+        myFileService.uploadPrice(xlFile, ()=>{
           myXLService.createXLCross(priceListData, (xlFileCross)=>{
-              myAWSService.uploadCross(xlFileCross, ()=>{
-                myAWSService.getPriceUpdateDate((data)=>{
+              myFileService.uploadCross(xlFileCross, ()=>{
+                myFileService.getPriceListUpdateDate((data)=>{
                   res.send({data: data, res: "OK"});
                 });
               });
@@ -376,9 +376,6 @@ app.get('/api/getsitemapupdatedate', function(req, res) {
   myFileService.getSiteMapUpdateDate((data)=>{
     res.send(data);
   });
-  // myAWSService.getSiteMapUpdateDate((data)=>{
-  //   res.send(data);
-  // });
 });
 
 app.get('/api/createsitemap', function(req, res) {
