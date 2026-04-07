@@ -14,21 +14,23 @@ import { MyXLService } from './services/xls.service.js';
 const myXLService = new MyXLService();
 // import { MyAWSService } from './services/aws.service.js';
 // const myAWSService = new MyAWSService();
-import * as http from 'http';
-import * as https from 'https';
+// import * as http from 'http';
+// import * as https from 'https';
 
 //////////////////////////////////////////////////
 ////////// http/https secure or not block
-if (!myNodeConfig.secure) {
-  const server = http.createServer(app);
-  server.listen(myNodeConfig.serverPort, () => { console.log("runs on HTTP " + myNodeConfig.serverPort)});
-} else {
+if (myNodeConfig.secure) {
+  const https = await import('node:https');
   let privateKey = fs.readFileSync(`/etc/letsencrypt/live/seltex.ru/privkey.pem`);
   let certificate = fs.readFileSync(`/etc/letsencrypt/live/seltex.ru/fullchain.pem`);
   let credentials = {key: privateKey, cert: certificate};
   const server = https.createServer(credentials, app);
-  server.listen(myNodeConfig.serverPort, () => { console.log("runs on HTTPS " + myNodeConfig.serverPort) });
-}
+  server.listen(myNodeConfig.serverPort, () => { console.log("SISS runs on HTTPS " + myNodeConfig.serverPort) });
+} else {
+  const http = await import('node:http');
+  const server = http.createServer(app);
+  server.listen(myNodeConfig.serverPort, () => { console.log("SISS runs on HTTP " + myNodeConfig.serverPort)});
+} 
 //////////////////////////////////////////////
 
 app.use(bodyParser.urlencoded({ extended: false },{limit: '5mb'}));
@@ -47,13 +49,17 @@ app.use(function(req, res, next) {
 });
 
 app.get('/api/company/exists/:company', function(req, res) {
-  mySqlService.getCompanyAtLogin(req.params.company, (items, error) => {
-    if (error) {
-      res.send({ status: 'error', error: error });
-    } else {
-      res.send({ status: 'ok', items: items });
-    }
-  });
+  if (myNodeConfig.production) {
+    mySqlService.getCompanyAtLogin(req.params.company, (items, error) => {
+      if (error) {
+        res.send({ status: 'error', error: error });
+      } else {
+        res.send({ status: 'ok', items: items });
+      }
+    });
+  } else {
+    res.send({ status: 'ok', items: items });
+  }
 });
 
 app.get('/api/logInUser/:email/:password/:captcha/:companyId', function(req, res) {
@@ -101,8 +107,8 @@ app.get('/api/logInUser/:email/:password/:captcha/:companyId', function(req, res
     // console.error("error in https post request: ", error);
     res.send({ status: 'error', error: "wrong input" });
   })
-  req2.write(data)
-  req2.end()
+  req2.write(data);
+  req2.end();
 });
 
 app.get('/api/checkCurrentUser/:userId/:token', function(req, res) {
@@ -112,6 +118,7 @@ app.get('/api/checkCurrentUser/:userId/:token', function(req, res) {
 });
 
 app.get('/api/check/userlogged/user/:userID/email/:email/token/:token/company/:company/', function(req, res) {
+  console.log(req.params.userID, req.params.email, req.params.token, req.params.company);
   mySqlService.checkUserLoggedIn(req.params.userID, req.params.email, req.params.token, req.params.company, (items, error) => {
     if (error) {
       res.send({ status: 'error', error: error });
@@ -354,13 +361,13 @@ app.get('/api/createxlprice', function(req, res) {
   mySqlService.getPriceListData(req.params.company, (priceListData) => {
     myXLService.createXLPrice(priceListData, (xlFile)=>{
         myFileService.uploadPrice(xlFile, ()=>{
-          myXLService.createXLCross(priceListData, (xlFileCross)=>{
-              myFileService.uploadCross(xlFileCross, ()=>{
+          // myXLService.createXLCross(priceListData, (xlFileCross)=>{
+          //     myFileService.uploadCross(xlFileCross, ()=>{
                 myFileService.getPriceListUpdateDate((data)=>{
                   res.send({data: data, res: "OK"});
                 });
-              });
-          });
+          //     });
+          // });
         });
     });
   });
@@ -402,6 +409,7 @@ app.get('/api/createsitemap', function(req, res) {
 //
 app.get('/api/temp', function(req, res) {
   console.log('Temp WORKS!!!')
+  res.send({data: "TempDataSent"});
 });
 //
 // import { TempService } from './temp/temp.service';
