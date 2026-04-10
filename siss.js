@@ -14,20 +14,20 @@ import { MyXLService } from './services/xls.service.js';
 const myXLService = new MyXLService();
 // import { MyAWSService } from './services/aws.service.js';
 // const myAWSService = new MyAWSService();
-// import * as http from 'http';
-// import * as https from 'https';
+import * as http from 'http';
+import * as https from 'https';
 
 //////////////////////////////////////////////////
 ////////// http/https secure or not block
 if (myNodeConfig.secure) {
-  const https = await import('node:https');
+  // const https = await import('node:https');
   let privateKey = fs.readFileSync(`/etc/letsencrypt/live/seltex.ru/privkey.pem`);
   let certificate = fs.readFileSync(`/etc/letsencrypt/live/seltex.ru/fullchain.pem`);
   let credentials = {key: privateKey, cert: certificate};
   const server = https.createServer(credentials, app);
   server.listen(myNodeConfig.serverPort, () => { console.log("SISS runs on HTTPS " + myNodeConfig.serverPort) });
 } else {
-  const http = await import('node:http');
+  // const http = await import('node:http');
   const server = http.createServer(app);
   server.listen(myNodeConfig.serverPort, () => { console.log("SISS runs on HTTP " + myNodeConfig.serverPort)});
 } 
