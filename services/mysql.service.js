@@ -256,7 +256,7 @@ export class MySqlService {
 
   getLast100Inventory(company, callback) {
     let items = [];
-    let query = `SELECT * FROM seltexru.inventory order by id desc limit 500`;
+    let query = `SELECT * FROM seltexru.inventory order by id desc limit 1000`;
     let connection = mysql.createConnection(mySqlConnection);
     let request = connection.query(query);
     request

@@ -78,14 +78,6 @@ export class MyFileService {
     } else {
       readFile(file);
     }
-
-
-
-
-    // console.log(file)
-    // if (fs.existsSync(file)) {
-    //   callback({exists:true});/etc/letsencrypt/live/seltex.ru/privkey.pem
-    // }
   }
 
   getCertificates() {
@@ -96,12 +88,44 @@ export class MyFileService {
 
   getPriceListUpdateDate (callback) {
     try {
+      // console.log(`${__dirname}/WOTONO/${fsConfig.siteDir}`);
       const stats = fs.statSync(`${__dirname}/${fsConfig.siteDir}files/SeltexPrice.xlsx`);
       // const creationDate = stats.birthtime;
       // console.log(`File was created on: ${creationDate}`);
       callback({LastModified: stats.mtime});
     } catch (err) {
       console.error('Error getting file stats synchronously:', err);
+      callback(err);
+    }
+  }
+
+
+  uploadPrice (file, callback) {
+    try {
+      fs.writeFileSync(`${__dirname}/${fsConfig.siteDir}/files/SeltexPrice.xlsx`, file);
+      callback("OK");
+    } catch (err) {
+      console.log(err);
+      callback(err);
+    }
+  }
+
+  // uploadCross (file, callback) {
+  //   try {
+  //     fs.writeFileSync(`${__dirname}/${fsConfig.siteDir}/files/SeltexCross.xlsx`, file);
+  //     callback("OK");
+  //   } catch (err) {
+  //     console.log(err);
+  //     callback(err);
+  //   }
+  // }
+
+  uploadSiteMap (file, callback) {
+    try {
+      fs.writeFileSync(`${__dirname}/${fsConfig.siteDir}/sitemap.xml`, file);
+      callback("OK");
+    } catch (err) {
+      console.log(err);
       callback(err);
     }
   }
@@ -115,35 +139,4 @@ export class MyFileService {
       callback(err);
     }
   }
-
-  uploadPrice (file, callback) {
-    try {
-      fs.writeFileSync(`${__dirname}/${fsConfig.siteDir}/files/SeltexPrice.xlsx`, file);
-      callback("OK");
-    } catch (err) {
-      console.log(err);
-      callback(err);
-    }
-  }
-
-  uploadCross (file, callback) {
-    try {
-      fs.writeFileSync(`${__dirname}/${fsConfig.siteDir}/files/SeltexCross.xlsx`, file);
-      callback("OK");
-    } catch (err) {
-      console.log(err);
-      callback(err);
-    }
-  }
-
-    uploadSiteMap (file, callback) {
-    try {
-      fs.writeFileSync(`${__dirname}/${fsConfig.siteDir}/sitemap.xml`, file);
-      callback("OK");
-    } catch (err) {
-      console.log(err);
-      callback(err);
-    }
-  }
-
 }

@@ -14,7 +14,7 @@ import { MyXLService } from './services/xls.service.js';
 const myXLService = new MyXLService();
 // import { MyAWSService } from './services/aws.service.js';
 // const myAWSService = new MyAWSService();
-import * as http from 'http';
+// import * as http from 'http';
 import * as https from 'https';
 
 //////////////////////////////////////////////////
@@ -27,13 +27,14 @@ if (myNodeConfig.secure) {
   const server = https.createServer(credentials, app);
   server.listen(myNodeConfig.serverPort, () => { console.log("SISS runs on HTTPS " + myNodeConfig.serverPort) });
 } else {
-  // const http = await import('node:http');
+  const http = await import('node:http');
   const server = http.createServer(app);
   server.listen(myNodeConfig.serverPort, () => { console.log("SISS runs on HTTP " + myNodeConfig.serverPort)});
 } 
 //////////////////////////////////////////////
 
 app.use(bodyParser.urlencoded({ extended: false },{limit: '5mb'}));
+app.use(express.json());
 // app.use(bodyParser.json({limit: '5mb'}));
 
 app.use(function(req, res, next) {
@@ -58,9 +59,14 @@ app.get('/api/company/exists/:company', function(req, res) {
       }
     });
   } else {
-    res.send({ status: 'ok', items: items });
+    console.log("SERVER NOT IN PRODUCTION MODE. CHECK NODE CONFIG");
+    res.send({ status: 'ok', items: {company: "seltex"} });
   }
 });
+
+////////////////////////
+// USER'S APIS - START:
+////////////////////////
 
 app.get('/api/logInUser/:email/:password/:captcha/:companyId', function(req, res) {
   // const data = JSON.stringify({
@@ -127,6 +133,10 @@ app.get('/api/check/userlogged/user/:userID/email/:email/token/:token/company/:c
     }
   });
 });
+//////////////////////
+// USER'S APIS - END
+//////////////////////
+
 
 app.get('/api/getmanufacturers/company/:company', function(req, res) {
   mySqlService.getManufacturers(req.params.company, (items) => {
