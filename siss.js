@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 const app = express();
 import bodyParser from 'body-parser';
 import fs from 'fs';
@@ -37,20 +38,22 @@ app.use(bodyParser.urlencoded({ extended: false },{limit: '5mb'}));
 app.use(express.json());
 // app.use(bodyParser.json({limit: '5mb'}));
 
-app.use(function(req, res, next) {
-  let allowedOrigins = myNodeConfig.allowedOrigins;
-  let origin = String(req.headers.origin);
-  if (allowedOrigins.indexOf(origin) > -1) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-  }
-  // res.header("Access-Control-Allow-Credentials", "true");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  res.header("Access-Control-Allow-Methods", "DELETE, PUT, GET, POST");
-  next();
-});
+// app.use(function(req, res, next) {
+//   let allowedOrigins = myNodeConfig.allowedOrigins;
+//   let origin = String(req.headers.origin);
+//   if (allowedOrigins.indexOf(origin) > -1) {
+//     res.setHeader('Access-Control-Allow-Origin', origin);
+//   }
+//   // res.header("Access-Control-Allow-Credentials", "true");
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//   res.header("Access-Control-Allow-Methods", "DELETE, PUT, GET, POST");
+//   next();
+// });
+
+app.use(cors());
 
 app.get('/api/company/exists/:company', function(req, res) {
-  if (myNodeConfig.production) {
+  // if (myNodeConfig.production) {
     mySqlService.getCompanyAtLogin(req.params.company, (items, error) => {
       if (error) {
         res.send({ status: 'error', error: error });
@@ -58,10 +61,10 @@ app.get('/api/company/exists/:company', function(req, res) {
         res.send({ status: 'ok', items: items });
       }
     });
-  } else {
-    console.log("SERVER NOT IN PRODUCTION MODE. CHECK NODE CONFIG");
-    res.send({ status: 'ok', items: {company: "seltex"} });
-  }
+  // } else {
+  //   console.log("SERVER NOT IN PRODUCTION MODE. CHECK NODE CONFIG");
+  //   res.send({ status: 'ok', items: {company: "seltex"} });
+  // }
 });
 
 ////////////////////////
@@ -124,7 +127,7 @@ app.get('/api/checkCurrentUser/:userId/:token', function(req, res) {
 });
 
 app.get('/api/check/userlogged/user/:userID/email/:email/token/:token/company/:company/', function(req, res) {
-  console.log(req.params.userID, req.params.email, req.params.token, req.params.company);
+  // console.log(req.params.userID, req.params.email, req.params.token, req.params.company);
   mySqlService.checkUserLoggedIn(req.params.userID, req.params.email, req.params.token, req.params.company, (items, error) => {
     if (error) {
       res.send({ status: 'error', error: error });
