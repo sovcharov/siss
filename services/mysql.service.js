@@ -827,4 +827,35 @@ export class MySqlService {
   //   connection.end();
   // };
 
+  getConnection (callback) {
+    // let connection = mysql.createConnection(mySqlConnection);
+    callback(mysql.createConnection(mySqlConnection));
+  }
+
+  updatePriceAndStock(company, item, connection, callback) {
+    // console.log(item.id);
+    // callback("OK");
+    // let connection = mysql.createConnection(mySqlConnection);
+    connection.query('INSERT INTO inventory1s (ID, DESCRIPTION, NUMBERS, PRICE, stock, ordered, msk) values (?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE description = VALUES(description), NUMBERS = VALUES(NUMBERS), price  = VALUES(price), stock = VALUES(stock), ordered = VALUES(ordered), msk =VALUES(msk)', [item.id, item.description, item.numbers, item.price, item.stock, item.ordered, item.msk], callback("OK"));
+
+    // let currentId = 0;
+    // let query = `call getSiteMapData(${company})`;
+    // let connection = mysql.createConnection(mySqlConnection);
+    // let request = connection.query(query);
+    // request
+    //   .on('error', (err)=>{
+    //     console.log(err);
+    //   })
+    //   .on('result', (row) => {
+    //     row.url = `https://www.seltex.ru/cat/${row.url}`;
+    //     items[items.length] = row.url;
+    //   })
+    //   .on('end', () => {
+    //     // let's get rid of OkPacket that arrives after stored procedure
+    //     items.splice(items.length - 1, 1);
+    //     callback(items);
+    //   });
+    // connection.end();
+  }
+
 }

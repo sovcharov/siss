@@ -1,5 +1,9 @@
 import express from 'express';
 import cors from 'cors';
+import multer from 'multer';
+import iconv from 'iconv-lite';
+const storage = multer.memoryStorage(); // Stores file in memory as a Buffer
+const upload = multer({ storage: storage });
 const app = express();
 import bodyParser from 'body-parser';
 import fs from 'fs';
@@ -17,6 +21,7 @@ const myXLService = new MyXLService();
 // const myAWSService = new MyAWSService();
 // import * as http from 'http';
 import * as https from 'https';
+
 
 //////////////////////////////////////////////////
 ////////// http/https secure or not block
@@ -411,6 +416,106 @@ app.get('/api/createsitemap', function(req, res) {
   });
 });
 
+app.post('/api/update1s', upload.single('file'), function(req, res) {
+  if (!req.file) {
+    return res.status(400).send('No file uploaded.');
+  }
+  try {
+    const decodedContent = iconv.decode(req.file.buffer, 'windows-1251');
+    let jsonData = JSON.parse(decodedContent);
+    // console.log(jsonData.length);
+    jsonData = JSON.stringify(jsonData);
+    fs.writeFile('../sissdata/data1s.json', jsonData, (err) => {
+      if (err) {
+          console.error('Error writing file:', err);
+          return res.status(500).send('Error saving data');
+      }
+      res.send('Data saved successfully!');
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({text: 'Error processing file'});
+  }
+  // try {
+  // res.setHeader('Content-Type', 'text/plain');
+  // res.setHeader('Transfer-Encoding', 'chunked');
+  //   const decodedContent = iconv.decode(req.file.buffer, 'windows-1251');
+  //   const jsonData = JSON.parse(decodedContent);
+  //   console.log(jsonData.length);
+  //   let percentsDone = 0;
+  //   let totalItems = jsonData.length;
+  //   for (let i = 0; i < jsonData.length; i += 1) {
+  //     if((i/totalItems*100-1)>percentsDone) {
+  //       percentsDone += 1;
+  //       // console.log(i/totalItems*100-1, "  ", percentsDone);
+  //       // function hey () {
+  //       //   response.write(percentsDone2.toString())
+  //       // }
+  //       setTimeout((percentDone2, response, jsonData2) => {
+  //         console.log(percentDone2);
+  //         res.write(percentsDone.toString());
+  //           if (i === jsonData2.length-1) {
+  //             res.end();
+  //           }
+  //       }, 2000, percentsDone, res, jsonData);
+  //     }
+
+  //   }
+  // } catch (err) {
+  //   console.error(err);
+  //   res.status(500).send({text: 'Error processing file'});
+  // }
+});
+
+app.get('/api/updatedatabasepriceandstock', (req, res) => {
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+  fs.readFile('../sissdata/data1s.json', 'utf8', (err, data) => {
+    if (err) {
+      console.error('Error reading file:', err);
+      return;
+    }
+    mySqlService.getConnection((connection) => {
+      const dataFor1s = JSON.parse(data);
+      const dataFor1sLength = dataFor1s.length;
+      let persentsDone = 0;
+      let countUpdated = 0;
+      for (let i = 0; i < dataFor1sLength; i += 1) {
+        dataFor1s[i].id = dataFor1s[i].id.replace('00-', '');
+        mySqlService.updatePriceAndStock(1, dataFor1s[i], connection, (result) => {
+          countUpdated += 1;
+          // console.log(result, countUpdated);
+          if(Number(persentsDone)<Number((countUpdated/dataFor1sLength*100).toFixed(1))) {
+            persentsDone = (countUpdated/dataFor1sLength*100).toFixed(1);
+            // console.log(result, countUpdated);
+            const data = JSON.stringify({ percentsDone: persentsDone, countUpdated: countUpdated, total: dataFor1sLength });
+            res.write(`data: ${data}\n\n`);
+
+          }
+          if (countUpdated === dataFor1sLength) {
+            persentsDone = 100;
+            const data = JSON.stringify({ percentsDone: persentsDone, countUpdated: countUpdated, total: dataFor1sLength, fullyUpdated: true });
+            res.write(`data: ${data}\n\n`);
+          }
+        })
+      }
+    })  
+
+  });
+
+
+  // const intervalId = setInterval(() => {
+  //   // const data = JSON.stringify({ message: 'Update at ' + new Date() });
+  //   res.write(`data: ${data}\n\n`);
+  // }, 200);
+
+  req.on('close', () => {console.log("Subscription Closed")});
+  
+});
+
+
+
 
 
 //////////////////////////////////////////////////////////
@@ -430,4 +535,4 @@ app.get('/api/temp', function(req, res) {
 // tempService.createURLs();
 //////////////////////////////////////////////////////////
 // END ALL TEMP FUNCS AND APIs:
-//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////f
