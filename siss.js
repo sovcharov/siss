@@ -421,7 +421,7 @@ app.post('/api/update1s', upload.single('file'), function(req, res) {
     return res.status(400).send('No file uploaded.');
   }
   try {
-    const decodedContent = iconv.decode(req.file.buffer, 'windows-1251');
+    const decodedContent = iconv.decode(req.file.buffer, 'utf-8');
     let jsonData = JSON.parse(decodedContent);
     // console.log(jsonData.length);
     jsonData = JSON.stringify(jsonData);
@@ -476,8 +476,10 @@ app.get('/api/updatedatabasepriceandstock', (req, res) => {
       console.error('Error reading file:', err);
       return;
     }
+    // console.log(data);
     mySqlService.getConnection((connection) => {
       const dataFor1s = JSON.parse(data);
+      // console.log(dataFor1s);
       const dataFor1sLength = dataFor1s.length;
       let persentsDone = 0;
       let countUpdated = 0;
@@ -497,10 +499,13 @@ app.get('/api/updatedatabasepriceandstock', (req, res) => {
             persentsDone = 100;
             const data = JSON.stringify({ percentsDone: persentsDone, countUpdated: countUpdated, total: dataFor1sLength, fullyUpdated: true });
             res.write(`data: ${data}\n\n`);
+            connection.end();
           }
         })
       }
-    })  
+
+    })
+
 
   });
 

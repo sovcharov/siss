@@ -836,7 +836,24 @@ export class MySqlService {
     // console.log(item.id);
     // callback("OK");
     // let connection = mysql.createConnection(mySqlConnection);
-    connection.query('INSERT INTO inventory1s (ID, DESCRIPTION, NUMBERS, PRICE, stock, ordered, msk) values (?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE description = VALUES(description), NUMBERS = VALUES(NUMBERS), price  = VALUES(price), stock = VALUES(stock), ordered = VALUES(ordered), msk =VALUES(msk)', [item.id, item.description, item.numbers, item.price, item.stock, item.ordered, item.msk], callback("OK"));
+    // console.log(item);
+    const sql = 'INSERT INTO inventory1s (ID, DESCRIPTION, NUMBERS, PRICE, stock, ordered, msk) values (?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE description = VALUES(description), NUMBERS = VALUES(NUMBERS), price  = VALUES(price), stock = VALUES(stock), ordered = VALUES(ordered), msk =VALUES(msk)';
+    const values = [item.id, item.description, item.numbers, item.price, item.stock, item.ordered, item.msk];
+    connection.execute(
+      {
+        sql, 
+        values
+      },
+      (err, result, fields) => {
+        if (err instanceof Error) {
+          console.log(err);
+          return;
+        }
+        // console.log("result:", result);
+        // console.log("fields:", fields);
+        callback("OK")
+      }
+    );
 
     // let currentId = 0;
     // let query = `call getSiteMapData(${company})`;
