@@ -491,13 +491,13 @@ app.get('/api/updatedatabasepriceandstock', (req, res) => {
           if(Number(persentsDone)<Number((countUpdated/dataFor1sLength*100).toFixed(1))) {
             persentsDone = (countUpdated/dataFor1sLength*100).toFixed(1);
             // console.log(result, countUpdated);
-            const data = JSON.stringify({ percentsDone: persentsDone, countUpdated: countUpdated, total: dataFor1sLength });
+            const data = JSON.stringify({ percentsDone: persentsDone, fullyUpdated: false  });
             res.write(`data: ${data}\n\n`);
 
           }
           if (countUpdated === dataFor1sLength) {
             persentsDone = 100;
-            const data = JSON.stringify({ percentsDone: persentsDone, countUpdated: countUpdated, total: dataFor1sLength, fullyUpdated: true });
+            const data = JSON.stringify({ percentsDone: persentsDone, fullyUpdated: true });
             res.write(`data: ${data}\n\n`);
             connection.end();
           }
