@@ -332,7 +332,7 @@ export class MyFunctions {
   //   left join  seltexru.inventoryImages AS img on  i.id = img.inventoryId and img.main = 1
   // `
     query = `
-    SELECT i.id, i.description, i.comment, i.price, i.stock, i.ordered, i.msk, 
+    SELECT i.id, i.description, i.comment, i.price, i.stock, i.ordered, i.msk, i.weight,
     img.id as imgId, n.number, n.main, m.fullName as manufacturerFullName, i.url
     FROM seltexru.inventory as i
     inner join seltexru.inventoryNumbers as n on i.id = n.inventoryId
